@@ -50,7 +50,8 @@
 * [License](#license)
 ---
 ## About The project
-AutoCookie requires the data acquired using [ChromePass](https://github.com/darkarp/chromepass) or data in the same format.  
+AutoCookie requires the data acquired using [ChromePass](https://github.com/darkarp/chromepass) or data in the same [format](#the-chromepass-data-format).
+```
 
 It's a python-based console application that starts a browser with the following features:
 
@@ -112,7 +113,44 @@ If victims were found for a website and you change the url on the browser, you m
 ### Notes
 >This is a very early release with just the basic functionality.    
 `Refactorization` and `support for multiple cookie files from the same ip address`, as well as `command-line parameter-based usage` will be added in the future. 
+  
+---  
 
+## The ChromePass data format
+This format is a base directory called `data`. Inside are folders named after the victim's `ip_address`. Inside there are files named `cookie0.json`, `cookie1.json`.  
+An example:  
+
+![Data directory list](https://i.imgur.com/j7fwj5A.png)  
+
+The `login` files are useless for the `AutoCookie`, we're only interested in the `cookie` files.  
+Inside the `cookie` json files, the structure is as follows:
+```json
+{
+  "domain_name_1": [{
+        "name": "COOKIE_NAME",
+        "value": "COOKIE_VALUE",
+        "domain": "domain_name"
+    }, {
+        "name": "COOKIE_NAME",
+        "value": "COOKIE_VALUE",
+        "domain": "docs.github.com"
+    }],
+    "domain_name_2": [{
+        "name": "COOKIE_NAME",
+        "value": "COOKIE_VALUE",
+        "domain": "domain_name"
+    }, {
+        "name": "COOKIE_NAME",
+        "value": "COOKIE_VALUE",
+        "domain": "domain_name"
+    }, {
+        "name": "COOKIE_NAME",
+        "value": "COOKIE_VALUE",
+        "domain": "domain_name"
+    }],
+}
+```
+>The `login` json files are not needed but the whole directory structure must be present.
 ---
  
 ## Errors, Bugs and feature requests
