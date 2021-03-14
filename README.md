@@ -50,7 +50,7 @@
 * [License](#license)
 ---
 ## About The project
-AutoCookie requires the data stolen using [ChromePass](https://github.com/darkarp/chromepass) or data in the same format.  
+AutoCookie requires the data acquired using [ChromePass](https://github.com/darkarp/chromepass) or data in the same format.  
 
 It's a python-based console application that starts a browser with the following features:
 
