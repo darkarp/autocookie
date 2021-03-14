@@ -112,7 +112,7 @@ If victims were found for a website and you change the url on the browser, you m
 
 ### Notes
 >This is a very early release with just the basic functionality.    
-`Refactorization` and `support for multiple cookie files from the same ip address`, as well as `command-line parameter-based usage` will be added in the future. 
+`Refactorization`, `non-interactive usage`, etc. will be added in the future. 
   
 ---  
 
