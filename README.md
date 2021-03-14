@@ -97,7 +97,7 @@ python -m pip install -r requirements.txt
 
 ## Usage
 
-Chromepass is very straightforward. Start by running:
+AutoCookie is very straightforward. Start by running:
 ```powershell
 > python autocookie.py
 ```
