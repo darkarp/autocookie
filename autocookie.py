@@ -33,7 +33,7 @@ def load_cookies(victim, driver: webdriver.Firefox):
     sessions = len(victim)
     selection = next(iter(victim.keys()))
     if sessions > 1:
-        selection = str(int(load_selection_screen(sessions, victim))-1)
+        selection = load_selection_screen(sessions, victim)
     if selection == "s":
         print("[+] Skipping...")
         return False
