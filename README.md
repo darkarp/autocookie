@@ -66,13 +66,13 @@ It's a python-based console application that starts a browser with the following
 This is a very simple application, which uses only:
 
 * [Python] - Tested on python 3.6+
-* [Geckodriver] - Make sure you have firefox downloaded as well
+* [Firefox] - It requires Firefox to run. Instead of adding support for many browsers, having to deal with the problems of each one, it runs with Firefox, the most stable browser by far to run with selenium.
 
 ### Installation
 
 Autocookie can be used in any operating system but it requires the stolen cookies obtained from [ChromePass](https://github.com/darkarp/chromepass) or the same format of cookies.
 
-First, make sure you have [Firefox] installed (latest version). The `geckodriver.exe` is already included but if it doesn't work it should be replaced with the latest version: [Geckodriver]
+
 
 Clone the repository:
 ```powershell
@@ -141,4 +141,3 @@ I am not responsible for what you do with the information and code provided. Thi
    
 [Python]: <https://www.python.org/downloads/>
 [Firefox]: <https://www.mozilla.org/en-US/firefox/new/>
-[Geckodriver]: <https://github.com/mozilla/geckodriver/releases>

