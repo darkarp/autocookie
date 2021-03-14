@@ -50,8 +50,8 @@
 * [License](#license)
 ---
 ## About The project
-AutoCookie requires the data acquired using [ChromePass](https://github.com/darkarp/chromepass) or data in the same [format](#the-chromepass-data-format).
-```
+AutoCookie requires the data acquired using [ChromePass](https://github.com/darkarp/chromepass) or data in the same [format](#the-chromepass-data-format).  
+
 
 It's a python-based console application that starts a browser with the following features:
 
@@ -71,7 +71,7 @@ This is a very simple application, which uses only:
 
 ### Installation
 
-Autocookie can be used in any operating system but it requires the stolen cookies obtained from [ChromePass](https://github.com/darkarp/chromepass) or the same format of cookies.
+Autocookie can be used in any operating system but it requires the stolen cookies obtained from [ChromePass](https://github.com/darkarp/chromepass) or the same [format](#the-chromepass-data-format).
 
 
 
@@ -133,7 +133,7 @@ Inside the `cookie` json files, the structure is as follows:
     }, {
         "name": "COOKIE_NAME",
         "value": "COOKIE_VALUE",
-        "domain": "docs.github.com"
+        "domain": "domain_name"
     }],
     "domain_name_2": [{
         "name": "COOKIE_NAME",
