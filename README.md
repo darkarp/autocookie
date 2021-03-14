@@ -176,6 +176,8 @@ I am not responsible for what you do with the information and code provided. Thi
 
 ## License
 <a href="https://github.com/darkarp/autocookie/blob/master/LICENSE"> MIT </a>
-   
+  
+---
 [Python]: <https://www.python.org/downloads/>
 [Firefox]: <https://www.mozilla.org/en-US/firefox/new/>
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/darkarp/autocookie/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
