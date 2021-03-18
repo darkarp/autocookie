@@ -175,7 +175,7 @@ If you wish to contact me, you can do so via: `mario@whitehathacking.tech`
 I am not responsible for what you do with the information and code provided. This is intended for professional or educational purposes only.
 
 ## License
-<a href="https://github.com/darkarp/autocookie/blob/master/LICENSE"> MIT </a>
+<a href="https://github.com/darkarp/autocookie/blob/master/LICENSE"> AGPL-3.0 </a>
   
 ---
 [Python]: <https://www.python.org/downloads/>
