@@ -66,7 +66,7 @@ class Cookie:
 
 
 class CookieJar:
-    def __init__(self, cookies: list[Cookie]) -> None:
+    def __init__(self, cookies) -> None:
         self.cookies = {}
         for cookie in cookies:
             if cookie.domain not in self.cookies:
